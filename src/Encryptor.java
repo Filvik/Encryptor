@@ -50,13 +50,15 @@ public class Encryptor {
             }
         }
 
-        encryptedString =  joinArray(result);
+        encryptedString = joinArray(result);
 
+        //Закодирование даты.
         Date date1 = new Date();
         unixTimestamp = (date1.getTime() + CONST);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixTimestamp);
         encryptedIntTime = dateFormat.format(calendar.getTime());
+        //
 
         return (encryptedString + " Создан " + encryptedIntTime);
     }
@@ -78,22 +80,28 @@ public class Encryptor {
                 if (result[i].equals(decodingKey[j]) && caseCheck[i] == '-') {
                     result[i] = encodingKey[j];
 
-                } else if ((result[i].toLowerCase().equals(decodingKey[j]) && caseCheck[i]== '^')) {
+                } else if ((result[i].toLowerCase().equals(decodingKey[j]) && caseCheck[i] == '^')) {
                     result[i] = encodingKey[j].toUpperCase();
                 }
             }
         }
-        decodedString =  joinArray(result);
+        decodedString = joinArray(result);
 
+        //Раскодирование даты.
         Calendar calendar = Calendar.getInstance();
         unixTimestamp -= CONST;
         calendar.setTimeInMillis(unixTimestamp);
         decodedIntTime = dateFormat.format(calendar.getTime());
+        //
 
         return (decodedString + " Создан " + decodedIntTime);
     }
 
-    private String joinArray(String[] result){
+    /**
+     * @param result Массив строк для преобразования.
+     * @return Преобразованную собранную строку.
+     */
+    private String joinArray(String[] result) {
         StringBuilder local = new StringBuilder();
         for (String s : result) {
             local.append(s);

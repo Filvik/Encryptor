@@ -1,9 +1,10 @@
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Encryptor {
 
-    private final static int CONST = 2400;
+    private final static long CONST = 9999999999999L;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 
@@ -12,6 +13,7 @@ public class Encryptor {
     public String decodedString;
     public String encryptedIntTime;
     public String decodedIntTime;
+    public long unixTimestamp;
 
 
     private final String[] encodingKey = {"с", "е", "а", "ф", "о", "и", "м", "к", "б", "в", "ъ", "ц", "ё", "н"};
@@ -36,8 +38,12 @@ public class Encryptor {
             encryptedString = encryptedString.replaceAll(encodingKey[i], (decodingKey[i].toUpperCase()));
         }
 
+        Date date1 = new Date();
+        unixTimestamp = (date1.getTime() + CONST);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY, CONST);
+        calendar.setTimeInMillis(unixTimestamp);
+
         encryptedIntTime = dateFormat.format(calendar.getTime());
 
         return (encryptedString + " Создан " + encryptedIntTime);
@@ -58,18 +64,20 @@ public class Encryptor {
         decodedString = encryptedString.toLowerCase();
         decodedString = decodedString.substring(0, 1).toUpperCase() + decodedString.substring(1);
 
-        int year = Integer.parseInt(encryptedIntTime.substring(0,4)) ;
-        int month = Integer.parseInt(encryptedIntTime.substring(5,7)) ;
-        int day = Integer.parseInt(encryptedIntTime.substring(8,10)) ;
-        int hour = Integer.parseInt(encryptedIntTime.substring(11,13)) ;
-        int minute = Integer.parseInt(encryptedIntTime.substring(14,16)) ;
-        int second = Integer.parseInt(encryptedIntTime.substring(17,19)) ;
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year,(month-1),day,hour,minute,second);
 
-        calendar.add(Calendar.HOUR_OF_DAY, -CONST);
-        decodedIntTime = dateFormat.format(calendar.getTime());
+//        int year = Integer.parseInt(encryptedIntTime.substring(0,4)) ;
+//        int month = Integer.parseInt(encryptedIntTime.substring(5,7)) ;
+//        int day = Integer.parseInt(encryptedIntTime.substring(8,10)) ;
+//        int hour = Integer.parseInt(encryptedIntTime.substring(11,13)) ;
+//        int minute = Integer.parseInt(encryptedIntTime.substring(14,16)) ;
+//        int second = Integer.parseInt(encryptedIntTime.substring(17,19)) ;
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(year,(month-1),day,hour,minute,second);
+//
+//        calendar.add(Calendar.HOUR_OF_DAY, -CONST);
+//        decodedIntTime = dateFormat.format(calendar.getTime());
 
         return (decodedString + " Создан " + decodedIntTime);
     }

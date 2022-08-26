@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Encryptor {
 
-    private final static long CONST = 9999999L;
+    private final static long CONST = 9999999999999L;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 
@@ -51,7 +51,6 @@ public class Encryptor {
         }
 
         encryptedString =  joinArray(result);
-        //System.out.println(encryptedString);
 
         Date date1 = new Date();
         unixTimestamp = (date1.getTime() + CONST);
@@ -70,13 +69,21 @@ public class Encryptor {
      */
     public String stringDecoder(String encryptedString) {
 
-        for (int i = 0; i < decodingKey.length; i++) {
-            encryptedString = encryptedString.replaceAll(decodingKey[i], encodingKey[i]);
+
+        String[] result = encryptedString.split("");
+
+        for (int i = 0; i < result.length; i++) {
+            for (int j = 0; j < decodingKey.length; j++) {
+
+                if (result[i].equals(decodingKey[j]) && caseCheck[i] == '-') {
+                    result[i] = encodingKey[j];
+
+                } else if ((result[i].toLowerCase().equals(decodingKey[j]) && caseCheck[i]== '^')) {
+                    result[i] = encodingKey[j].toUpperCase();
+                }
+            }
         }
-
-        decodedString = encryptedString;
-        decodedString = decodedString.substring(0, 1).toUpperCase() + decodedString.substring(1);
-
+        decodedString =  joinArray(result);
 
         Calendar calendar = Calendar.getInstance();
         unixTimestamp -= CONST;

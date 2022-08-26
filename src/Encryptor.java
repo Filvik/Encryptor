@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Encryptor {
 
-    private final static long CONST = 9999999999999L;
+    private final static long CONST = 999999999999999999L;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
 
@@ -25,7 +25,8 @@ public class Encryptor {
         this.testString = testString;
     }
 
-    /** Кодирует исходную строку.
+    /**
+     * Кодирует исходную строку.
      *
      * @param testString Исходная строка для кодировки.
      * @return Закодированную строку с искаженной датой.
@@ -40,16 +41,15 @@ public class Encryptor {
 
         Date date1 = new Date();
         unixTimestamp = (date1.getTime() + CONST);
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixTimestamp);
-
         encryptedIntTime = dateFormat.format(calendar.getTime());
 
         return (encryptedString + " Создан " + encryptedIntTime);
     }
 
-    /** Раскодирует закодированную строку.
+    /**
+     * Раскодирует закодированную строку.
      *
      * @param encryptedString Закодированная строка.
      * @return Раскодированную строку с нормальной датой.
@@ -65,19 +65,10 @@ public class Encryptor {
         decodedString = decodedString.substring(0, 1).toUpperCase() + decodedString.substring(1);
 
 
-
-//        int year = Integer.parseInt(encryptedIntTime.substring(0,4)) ;
-//        int month = Integer.parseInt(encryptedIntTime.substring(5,7)) ;
-//        int day = Integer.parseInt(encryptedIntTime.substring(8,10)) ;
-//        int hour = Integer.parseInt(encryptedIntTime.substring(11,13)) ;
-//        int minute = Integer.parseInt(encryptedIntTime.substring(14,16)) ;
-//        int second = Integer.parseInt(encryptedIntTime.substring(17,19)) ;
-//
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.set(year,(month-1),day,hour,minute,second);
-//
-//        calendar.add(Calendar.HOUR_OF_DAY, -CONST);
-//        decodedIntTime = dateFormat.format(calendar.getTime());
+        Calendar calendar = Calendar.getInstance();
+        unixTimestamp -= CONST;
+        calendar.setTimeInMillis(unixTimestamp);
+        decodedIntTime = dateFormat.format(calendar.getTime());
 
         return (decodedString + " Создан " + decodedIntTime);
     }
